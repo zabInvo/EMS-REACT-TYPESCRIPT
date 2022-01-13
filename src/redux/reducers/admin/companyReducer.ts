@@ -1,6 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice , PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+export interface CompanyObject {
+  id: number;
+  name: string;
+  address: string;
+  type: string;
+}
+
+export interface CompanyInterface {
+  companies: Array<CompanyObject>,
+  currentCompany: number | null
+}
+
+export const initialState:CompanyInterface = {
   companies: [],
   currentCompany: null,
 };
@@ -9,7 +21,7 @@ const companyReducer = createSlice({
   name: "Company",
   initialState,
   reducers: {
-    SET_COMPANIES(state, action) {
+    SET_COMPANIES(state, action:PayloadAction<Array<CompanyObject>>) {
       state.companies = action.payload;
     },
     SET_CURRENT_COMPANIES(state, action) {

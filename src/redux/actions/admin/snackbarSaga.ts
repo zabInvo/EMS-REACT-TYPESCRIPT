@@ -2,7 +2,7 @@ import { put, takeEvery } from "redux-saga/effects";
 
 import { SET_SNACKBAR , CLEAR_SNACKBAR} from "../../reducers/admin/snackbarReducer";
 
-function* creatingSnackbar(data) {
+function* creatingSnackbar(data:any) {
   try {
     yield put(SET_SNACKBAR(data));
   } catch (error) {
@@ -10,7 +10,7 @@ function* creatingSnackbar(data) {
   }
 }
 
-function* clearSnackbar(data) {
+function* clearSnackbar(data:any) {
   try {
     yield put(CLEAR_SNACKBAR(data));
   } catch (error) {

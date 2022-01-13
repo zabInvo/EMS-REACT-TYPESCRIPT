@@ -7,17 +7,23 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector } from "../../redux/reduxHook";
 
-function AdminCurrentCompanyDialog(props) {
+interface AdminCompanyProps {
+  isOpen: boolean;
+  toggle(): void;
+}
+
+const AdminCurrentCompanyDialog: React.FC<AdminCompanyProps> = (props) => {
   const dispatch = useDispatch();
 
-  const setCurrentCompany = (id) => {
+  const setCurrentCompany = (id: number) => {
     const currentCompanyId = id;
     dispatch({ type: "SET_CURRENT_COMPANIES_REQUEST", currentCompanyId });
     dispatch({ type: "FETCH_DASHBOARD_STATS_REQUEST", currentCompanyId });
   };
 
-  const companies = useSelector((state) =>
+  const companies = useAppSelector((state) =>
     state.companyReducer.companies ? state.companyReducer.companies : []
   );
 
@@ -62,6 +68,6 @@ function AdminCurrentCompanyDialog(props) {
       </Dialog>
     </div>
   );
-}
+};
 
 export default AdminCurrentCompanyDialog;

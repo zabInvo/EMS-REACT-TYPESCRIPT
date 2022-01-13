@@ -9,9 +9,10 @@ import service from "../../../services/axiosService";
 
 const fetchCompaniesApi = async () => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const companies = await service.post(
       "company/getCompanies",
-      JSON.parse(localStorage.getItem("adminToken"))
+      JSON.parse(token)
     );
     return companies.data.data;
   } catch (error) {
@@ -19,55 +20,58 @@ const fetchCompaniesApi = async () => {
   }
 };
 
-const createCompanyApi = async (data) => {
+const createCompanyApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const companies = await service.post(
       "company/create",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.payload
     );
     console.log(companies.data.message);
     return companies.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-const deleteCompanyApi = async (data) => {
+const deleteCompanyApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const companies = await service.post(
       "company/delete",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.payload
     );
     console.log(companies.data.message);
     return companies.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-const updateCompanyApi = async (data) => {
+const updateCompanyApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const companies = await service.post(
       "company/update",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.payload
     );
     console.log(companies.data.message);
     return companies.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-function* fetchCompanies() {
+function* fetchCompanies():any {
   try {
     const companies = yield call(fetchCompaniesApi);
     if (companies) {
@@ -78,7 +82,7 @@ function* fetchCompanies() {
   }
 }
 
-function* createCompany(data) {
+function* createCompany(data:any):any {
   try {
     const companies = yield call(createCompanyApi, data);
     if (companies) {
@@ -91,7 +95,7 @@ function* createCompany(data) {
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -103,7 +107,7 @@ function* createCompany(data) {
   }
 }
 
-function* deleteCompany(data) {
+function* deleteCompany(data:any):any {
   try {
     const companies = yield call(deleteCompanyApi, data);
     if (companies) {
@@ -116,7 +120,7 @@ function* deleteCompany(data) {
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -127,7 +131,7 @@ function* deleteCompany(data) {
   }
 }
 
-function* updateCompany(data) {
+function* updateCompany(data:any):any {
   try {
     const companies = yield call(updateCompanyApi, data);
     if (companies) {
@@ -140,7 +144,7 @@ function* updateCompany(data) {
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -151,7 +155,7 @@ function* updateCompany(data) {
   }
 }
 
-function* setCurrentCompany(id) {
+function* setCurrentCompany(id:object) {
   try {
     yield put(SET_CURRENT_COMPANIES(id));
   } catch (error) {

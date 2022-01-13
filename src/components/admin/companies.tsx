@@ -13,23 +13,24 @@ import CreateCompanyDialog from "./createCompanyDialog";
 import UpdateCompanyDialog from "./updateCompanyDialog";
 import DeleteCompanyDialog from "./deleteCompanyDialog";
 
-import RootReducer from "./interfaces";
+import { useAppSelector } from "../../redux/reduxHook";
+import { CompanyObject } from "../../redux/reducers/admin/companyReducer";
 
 const dummyLogo = require("../../dummyCompany.jpeg");
 
 export default function Companies() {
   const dispatch = useDispatch();
-  const companies = useSelector((state: RootReducer) =>
+  const companies = useAppSelector((state) =>
     state.companyReducer.companies ? state.companyReducer.companies : []
   );
   useEffect(() => {
     dispatch({ type: "FETCH_ALL_COMPANIES_REQUEST" });
   }, []);
 
-  const [selectedCompany, setSelectedCompany] = useState<company>();
-  const [showModal, setShowModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [showDeleteModal, setDeleteModal] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyObject | any>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [showDeleteModal, setDeleteModal] = useState<boolean>(false);
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -40,18 +41,11 @@ export default function Companies() {
   const toggleDeleteModal = () => {
     setDeleteModal(!showDeleteModal);
   };
-  const setCompany = (item: company) => {
+  const setCompany = (item: CompanyObject) => {
     setSelectedCompany(item);
   };
 
-  interface company {
-    id: number | null;
-    name: string | null;
-    type: string | null;
-    address: string | null;
-  }
-
-  const renderList = companies.map((item: company, index) => {
+  const renderList = companies.map((item: CompanyObject, index) => {
     return (
       <Grid item key={index} xs={12} sm={6} md={4}>
         <Card sx={{ maxWidth: 345, m: 2 }} elevation={5}>

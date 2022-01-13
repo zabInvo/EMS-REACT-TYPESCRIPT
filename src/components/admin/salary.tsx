@@ -18,9 +18,10 @@ import { useDispatch, useSelector } from "react-redux";
 import UpdateSalaryDialog from "./updateSalaryDialog";
 import CreateSalaryDialog from "./createSalaryDialog";
 
-import RootReducer from "./interfaces";
+import { useAppSelector } from "../../redux/reduxHook";
+import { EmployeeObject } from "../../redux/reducers/admin/salaryReducer";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,33 +43,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-interface salaryObj {
-  amount : number | null
-}
-
-interface salary {
-  name : string,
-  email : string,
-  Salary : salaryObj | null
-}
-
-function SalaryTable() {
+const SalaryTable: React.FC<EmployeeObject> = () => {
   const [showModal, setShowModal] = useState(false);
   const [showCreateSalaryModal, setShowCreateSalaryModal] = useState(false);
-  const [salaries, setSalaries] = useState<Array<salary> | []>([]);
+  const [salaries, setSalaries] = useState<Array<EmployeeObject> | []>([]);
   const [sorting, setSorting] = useState("desc");
-  const [selectedEmployee, setSelectedEmployee] = useState<salary>();
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeObject>();
   const dispatch = useDispatch();
-  const data = useSelector((state:RootReducer) =>
+  const data = useAppSelector((state) =>
     state.salaryReducer.salaries ? state.salaryReducer.salaries : []
   );
-  const currentCompany = useSelector((state:RootReducer) =>
+  const currentCompany = useAppSelector((state) =>
     state.companyReducer.currentCompany
       ? state.companyReducer.currentCompany
       : null
   );
   useEffect(() => {
-    dispatch({ type: "FETCH_SALARIES_REQUEST" , currentCompany});
+    dispatch({ type: "FETCH_SALARIES_REQUEST", currentCompany });
   }, []);
 
   useEffect(() => {
@@ -83,11 +74,11 @@ function SalaryTable() {
     setShowCreateSalaryModal(!showCreateSalaryModal);
   };
 
-  const setEmployee = (item:salary) => {
+  const setEmployee = (item: EmployeeObject) => {
     setSelectedEmployee(item);
   };
 
-  const sort = (column:string) => {
+  const sort = (column: string) => {
     if (column === "name") {
       if (sorting === "desc") {
         let sorting = _.orderBy(salaries, ["name"], ["asc"]);
@@ -156,7 +147,7 @@ function SalaryTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {salaries.map((item, index:number|null) => (
+            {salaries.map((item, index: number | null) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
                   {item.name}

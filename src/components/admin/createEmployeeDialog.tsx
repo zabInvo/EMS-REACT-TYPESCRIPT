@@ -1,34 +1,38 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector } from "../../redux/reduxHook";
 
-function UpdateCompanyDialog(props) {
+interface CreateEmployeeProps {
+  isOpen: boolean;
+  toggle(): void;
+}
+
+const CreateEmployeeDialog: React.FC<CreateEmployeeProps> = (props) => {
   const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [type, setType] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setName(props.data.name);
-    setAddress(props.data.address);
-    setType(props.data.type);
-  }, [props.isOpen]);
-
-  const updateCompany = (id) => {
+  const currentCompany = useAppSelector((state) =>
+    state.companyReducer.currentCompany
+      ? state.companyReducer.currentCompany
+      : null
+  );
+  const createEmployee = () => {
     const payload = {
-      id,
+      companyId: currentCompany,
       name,
-      address,
-      type,
+      email,
+      password,
     };
-    dispatch({ type: "UPDATE_COMPANIES_REQUEST", payload });
+    dispatch({ type: "CREATE_EMPLOYEE_REQUEST", payload });
   };
+
   return (
     <div>
       <Dialog
@@ -37,7 +41,7 @@ function UpdateCompanyDialog(props) {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Create New Company</DialogTitle>
+        <DialogTitle>Create New Employee</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -45,42 +49,42 @@ function UpdateCompanyDialog(props) {
             id="name"
             label="Name"
             type="email"
-            value={name}
             fullWidth
+            value={name}
             variant="standard"
             onChange={(event) => setName(event.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="address"
-            label="Address"
+            id="email"
+            label="Email"
             type="email"
-            value={address}
+            value={email}
             fullWidth
             variant="standard"
-            onChange={(event) => setAddress(event.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="type"
-            label="Type"
-            type="email"
-            value={type}
+            id="password"
+            label="Password"
+            type="password"
+            value={password}
             fullWidth
             variant="standard"
-            onChange={(event) => setType(event.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              updateCompany(props.data.id);
+              createEmployee();
               props.toggle();
             }}
           >
-            Update
+            Create
           </Button>
           <Button onClick={props.toggle}>Cancel</Button>
         </DialogActions>
@@ -89,4 +93,4 @@ function UpdateCompanyDialog(props) {
   );
 }
 
-export default UpdateCompanyDialog;
+export default CreateEmployeeDialog;

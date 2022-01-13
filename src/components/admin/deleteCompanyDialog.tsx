@@ -6,18 +6,27 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { CompanyObject } from "../../redux/reducers/admin/companyReducer";
 
-function DeleteEmployeeDialog(props) {
-  const [EmployeeData, setEmployeeData] = useState("");
+
+interface DeleteCompanyProps {
+  isOpen: boolean;
+  toggle(): void;
+  data: CompanyObject;
+}
+
+const DeleteCompanyDialog:React.FC<DeleteCompanyProps> = (props) => {
+  const [companyData, setCompanyData] = useState<CompanyObject>();
   const dispatch = useDispatch();
   useEffect(() => {
-    setEmployeeData(props.data);
+    setCompanyData(props.data);
   }, [props.isOpen]);
-  const deleteEmployee = (id) => {
+
+  const deleteCompnay = (id:number) => {
     const payload = {
       id,
     };
-    dispatch({ type: "DELETE_EMPLOYEE_REQUEST", payload });
+    dispatch({ type: "DELETE_COMPANIES_REQUEST", payload });
   };
   return (
     <div>
@@ -30,14 +39,18 @@ function DeleteEmployeeDialog(props) {
         <DialogTitle id="alert-dialog-title">{"Are you sure"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            You want to delete this employee ?
+            You want to delete this company ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button  onClick={() => {
-              deleteEmployee(props.data.id);
+          <Button
+            onClick={() => {
+              deleteCompnay(props.data.id);
               props.toggle();
-            }}>Delete</Button>
+            }}
+          >
+            Delete
+          </Button>
           <Button onClick={props.toggle} autoFocus>
             Cancel
           </Button>
@@ -47,4 +60,4 @@ function DeleteEmployeeDialog(props) {
   );
 }
 
-export default DeleteEmployeeDialog;
+export default DeleteCompanyDialog;

@@ -8,25 +8,25 @@ import { blue } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, FC } from "react";
+import { useEffect, useState } from "react";
 
 import AdminCurrentCompanyDialog from "./adminCompanyDialog";
+import { useAppSelector } from "../../redux/reduxHook";
 
-import  RootReducer  from "./interfaces";
 
-const AdminDashboard:FC = () => {
+const AdminDashboard = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState<boolean>(true);
-  const companies = useSelector((state:RootReducer)  =>
+  const companies = useAppSelector((state)  =>
     state.adminDashboardReducer.companies
       ? state.adminDashboardReducer.companies
       : 0
   );
-  const admin = useSelector((state:RootReducer) =>
+  const admin = useAppSelector((state) =>
     state.adminDashboardReducer.admins ? state.adminDashboardReducer.admins : 0
   );
-  const employees = useSelector((state:RootReducer) =>
+  const employees = useAppSelector((state) =>
     state.adminDashboardReducer.employees
       ? state.adminDashboardReducer.employees
       : 0
@@ -35,7 +35,7 @@ const AdminDashboard:FC = () => {
     dispatch({ type: "FETCH_ALL_COMPANIES_REQUEST" });
   }, []);
 
-  const toggleModal = () => {
+  const toggleModal = ():void => {
     setShowModal(!showModal);
   };
   return (

@@ -1,17 +1,18 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest , StrictEffect } from "redux-saga/effects";
 
 import { SET_STATS } from "../../reducers/admin/dashboardReducer";
 
 import service from "../../../services/axiosService";
 
-const dashboardStatsApi = async (data) => {
+const dashboardStatsApi = async (data:any) => {
   try {
     const payload = {
       companyId: data.currentCompanyId,
     };
+    const token:any = localStorage.getItem("adminToken");
     const stats = await service.post(
       "admin/getDashboardStats",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       payload
     );
     return stats.data.data;
@@ -20,7 +21,7 @@ const dashboardStatsApi = async (data) => {
   }
 };
 
-function* dashboardStats(data) {
+function* dashboardStats(data:any):any {
   try {
     const stats = yield call(dashboardStatsApi, data);
     if (stats) {
@@ -31,7 +32,7 @@ function* dashboardStats(data) {
   }
 }
 
-function* dashboardSaga() {
+function* dashboardSaga():Generator<StrictEffect> {
   yield takeLatest("FETCH_DASHBOARD_STATS_REQUEST", dashboardStats);
 }
 

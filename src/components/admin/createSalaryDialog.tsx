@@ -7,21 +7,29 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useDispatch, useSelector } from "react-redux";
+import { useAppSelector } from "../../redux/reduxHook";
+import { EmployeeObject } from "../../redux/reducers/admin/employeesReducers";
 
-function CreateSalaryDialog(props) {
-  const [salary, setSalary] = useState("");
-  const [value, setValue] = useState("");
-  const employees = useSelector((state) =>
+
+interface CreateSalaryProps {
+  isOpen:boolean,
+  toggle():void
+}
+
+const CreateSalaryDialog: React.FC<CreateSalaryProps> = (props) => {
+  const [salary, setSalary] = useState<string>();
+  const [value, setValue] = useState<EmployeeObject | any>();
+  const employees = useAppSelector((state) =>
     state.employeesReducers.employees ? state.employeesReducers.employees : []
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    setSalary("");
+    setSalary('');
   }, [props.isOpen]);
 
   const createSalary = () => {
     const payload = {
-      userId: value.id,
+      userId: value?.id,
       salary,
     };
     dispatch({ type: "CREATE_SALARY_REQUEST", payload });
@@ -38,7 +46,7 @@ function CreateSalaryDialog(props) {
         <DialogTitle>Assign Salary</DialogTitle>
         <DialogContent>
           <Autocomplete
-            onChange={(event, newValue) => {
+            onChange={(event, newValue:any) => {
               setValue(newValue);
             }}
             id="controllable-states-demo"

@@ -23,3 +23,6 @@ const persistor = persistStore(store);
 sagaMiddleware.run(rootSaga);
 
 export { store, persistor };
+
+export type stateReduced = ReturnType<typeof store.getState>
+export type appDispatch = typeof store.dispatch;

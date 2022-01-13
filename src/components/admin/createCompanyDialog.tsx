@@ -7,10 +7,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-function CreateCompanyDialog(props) {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [type, setType] = useState("");
+interface CreateCompanyProps {
+  isOpen: boolean;
+  toggle(): void;
+}
+
+const CreateCompanyDialog: React.FC<CreateCompanyProps> = (props) => {
+  const [name, setName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [type, setType] = useState<string>("");
   const dispatch = useDispatch();
   const createCompany = () => {
     const payload = {

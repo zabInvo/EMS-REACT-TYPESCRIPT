@@ -1,12 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface dashboardState {
-  employees : Number,
-  admins : Number,
-  companies : Number
+interface dashboardInterface {
+  employees: Number;
+  admins: Number;
+  companies: Number;
 }
 
-const initialState = {
+interface dashboardPayload {
+  employees: Number;
+  admin: Number;
+  company: Number;
+}
+
+const initialState: dashboardInterface = {
   employees: 0,
   admins: 0,
   companies: 0,
@@ -16,7 +22,7 @@ const adminDashboardReducer = createSlice({
   name: "adminDashboad",
   initialState,
   reducers: {
-    SET_STATS(state, action) {
+    SET_STATS(state, action: PayloadAction<dashboardPayload>) {
       state.employees = action.payload.employees;
       state.admins = action.payload.admin;
       state.companies = action.payload.company;

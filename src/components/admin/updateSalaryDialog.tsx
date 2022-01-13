@@ -7,18 +7,26 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-function UpdateSalaryDialog(props) {
-  const [salary, setSalary] = useState("");
+import { EmployeeObject } from "../../redux/reducers/admin/salaryReducer";
+
+interface UpdateSalaryProps {
+  isOpen: boolean;
+  toggle(): void;
+  data: EmployeeObject | any;
+}
+
+const UpdateSalaryDialog:React.FC<UpdateSalaryProps> = (props) => {
+  const [salary, setSalary] = useState<EmployeeObject>();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setSalary(props.data && props.data.Salary ? props.data.Salary.amount : "");
+    setSalary(props.data && props.data?.Salary ? props.data?.Salary?.amount : null);
   }, [props.isOpen]);
 
-  const updateSalary = (userId) => {
+  const updateSalary = (userId:number) => {
     const payload = {
       userId,
-      salary
+      salary,
     };
     dispatch({ type: "UPDATE_SALARY_REQUEST", payload });
   };
@@ -40,14 +48,18 @@ function UpdateSalaryDialog(props) {
             value={salary}
             fullWidth
             variant="standard"
-            onChange={(event) => setSalary(event.target.value)}
+            onChange={(event:any) => setSalary(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button  onClick={() => {
+          <Button
+            onClick={() => {
               updateSalary(props.data.id);
               props.toggle();
-            }}>Update</Button>
+            }}
+          >
+            Update
+          </Button>
           <Button onClick={props.toggle}>Cancel</Button>
         </DialogActions>
       </Dialog>

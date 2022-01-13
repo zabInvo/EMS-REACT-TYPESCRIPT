@@ -1,54 +1,56 @@
-import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest, takeEvery , StrictEffect} from "redux-saga/effects";
 
 import { LOGIN_ADMIN, LOGOUT_ADMIN } from "../../reducers/admin/loginReducer";
 import service from "../../../services/axiosService";
 import { SET_SNACKBAR } from "../../reducers/admin/snackbarReducer";
 
-const loginApi = async (data) => {
+const loginApi = async (data:any) => {
   try {
     const payload = data.data;
     const login = await service.post("admin/login", "", payload);
     localStorage.setItem("adminToken", JSON.stringify(login.data.token));
     return login.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-const uploadImageApi = async (data) => {
+const uploadImageApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const uploadImage = await service.post(
       "admin/uploadImage",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.formData
     );    
     return uploadImage.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.message ? error.response.data.message : error
     );
   }
 };
 
-const updatePasswordApi = async (data) => {
+const updatePasswordApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const updatePassword = await service.post(
       "admin/updatePassword",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.payload
     );
     console.log(updatePassword.data.message);
     return updatePassword.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.message ? error.response.data.message : error
     );
   }
 };
 
-function* login(data) {
+function* login(data:any):any {
   try {
     const token = yield call(loginApi, data);
     if (token) {
@@ -61,7 +63,7 @@ function* login(data) {
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -72,7 +74,7 @@ function* login(data) {
   }
 }
 
-function* logout(data) {
+function* logout():any {
   try {
     yield put(LOGOUT_ADMIN());
     localStorage.clear();
@@ -81,7 +83,7 @@ function* logout(data) {
   }
 }
 
-function* updatePassword(data) {
+function* updatePassword(data:any):any {
   try {
     const updatePassword = yield call(updatePasswordApi, data);
     console.log(updatePassword);
@@ -92,7 +94,7 @@ function* updatePassword(data) {
       error: false,
     };
     yield put(SET_SNACKBAR(snackPayload));
-  } catch (error) {
+  } catch (error:any) {
     console.log(error);
     const snackPayloadError = {
       status: true,
@@ -104,7 +106,7 @@ function* updatePassword(data) {
   }
 }
 
-function* uploadImage(data) {
+function* uploadImage(data:any):any {
   try {
     const updatePassword = yield call(uploadImageApi, data);
     const snackPayload = {
@@ -114,7 +116,7 @@ function* uploadImage(data) {
       error: false,
     };
     yield put(SET_SNACKBAR(snackPayload));
-  } catch (error) {
+  } catch (error:any) {
     console.log(error);
     const snackPayloadError = {
       status: true,
@@ -126,7 +128,7 @@ function* uploadImage(data) {
   }
 }
 
-function* adminSaga() {
+function* adminSaga():Generator<StrictEffect> {
   yield takeLatest("ADMIN_LOGIN_REQUEST", login);
   yield takeEvery("ADMIN_LOGOUT_REQUEST", logout);
   yield takeEvery("UPDATE_PASSWORD_REQUEST", updatePassword);

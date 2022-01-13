@@ -12,19 +12,20 @@ import { useDispatch, useSelector } from "react-redux";
 import CreateEmployeeDialog from "./createEmployeeDialog";
 import DeleteEmployeeDialog from "./deleteEmployeeDialog";
 
-import RootReducer from "./interfaces";
+import { useAppSelector } from "../../redux/reduxHook";
+import { EmployeeObject } from "../../redux/reducers/admin/employeesReducers";
 const dummyUser = require("../../dummyUser.png");
 
 export default function Employees() {
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setDeleteModal] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<employee>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showDeleteModal, setDeleteModal] = useState<boolean>(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeObject>();
 
   const dispatch = useDispatch();
-  const employees = useSelector((state: RootReducer) =>
+  const employees = useAppSelector((state) =>
     state.employeesReducers.employees ? state.employeesReducers.employees : []
   );
-  const currentCompany = useSelector((state: RootReducer) =>
+  const currentCompany = useAppSelector((state) =>
     state.companyReducer.currentCompany
       ? state.companyReducer.currentCompany
       : null
@@ -41,17 +42,11 @@ export default function Employees() {
     setDeleteModal(!showDeleteModal);
   };
 
-  const setEmployee = (item: employee) => {
+  const setEmployee = (item: EmployeeObject) => {
     setSelectedEmployee(item);
   };
 
-  interface employee {
-    id: number | null;
-    name: string | null;
-    email: string | null;
-  }
-
-  const renderList = employees.map((item: employee, index) => {
+  const renderList = employees.map((item: EmployeeObject, index) => {
     return (
       <Grid item key={index} xs={12} sm={6} md={3}>
         <Card sx={{ maxWidth: 260, m: 2 }} elevation={3}>

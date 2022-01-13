@@ -1,17 +1,22 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest , StrictEffect } from "redux-saga/effects";
+import * as Effects from "redux-saga/effects";
+
 
 import { SET_ATTENDANCE } from "../../reducers/admin/attendanceReducer";
 import { SET_SNACKBAR } from "../../reducers/admin/snackbarReducer";
 import service from "../../../services/axiosService";
 
-const fetchAttendanceApi = async (data) => {
+const call: any = Effects.call;
+
+const fetchAttendanceApi = async (data:any) => {
   try {
     const payload = {
       companyId: data.currentCompany,
     };
+    const token:any = localStorage.getItem("adminToken");
     const attendance = await service.post(
       "attendance/getAllAttendance",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       payload
     );
     return attendance.data.data[0].Employees;
@@ -20,23 +25,24 @@ const fetchAttendanceApi = async (data) => {
   }
 };
 
-const createAttendanceApi = async (data) => {
+const createAttendanceApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const attendance = await service.post(
       "attendance/createAttendance",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       data.payload
     );
     console.log(attendance.data.message);
     return attendance.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.message ? error.response.data.message : error
     );
   }
 };
 
-function* fetchAttendance(data) {
+function* fetchAttendance(data:any):any {
   try {
     const attendance = yield call(fetchAttendanceApi, data);
     if (attendance) {
@@ -47,7 +53,7 @@ function* fetchAttendance(data) {
   }
 }
 
-function* createAttendance(data) {
+function* createAttendance(data:any):any {
   try {
     const attendance = yield call(createAttendanceApi, data);
     if (attendance) {
@@ -60,7 +66,7 @@ function* createAttendance(data) {
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -71,7 +77,7 @@ function* createAttendance(data) {
   }
 }
 
-function* attendanceSaga() {
+function* attendanceSaga():Generator<StrictEffect> {
   yield takeLatest("FETCH_ATTENDANCE_REQUEST", fetchAttendance);
   yield takeLatest("CREATE_ATTENDANCE_REQUEST", createAttendance);
 }

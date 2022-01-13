@@ -1,18 +1,21 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-
-import { SET_SALARIES } from "../../reducers/admin/salaryReducer";
+import { put, takeLatest , StrictEffect } from "redux-saga/effects";
+import * as Effects from "redux-saga/effects";
+import { SET_EMPLOYEES } from "../../reducers/admin/employeesReducers";
 import { SET_SNACKBAR } from "../../reducers/admin/snackbarReducer";
 
 import service from "../../../services/axiosService";
+const call: any = Effects.call;
 
-const fetchSalariesApi = async (data) => {
+
+const fetchEmployeesApi = async (data:any) => {
   try {
     const payload = {
       companyId: data.currentCompany,
     };
+    const token:any = localStorage.getItem("adminToken");
     const employees = await service.post(
       "salary/getAllSalary",
-      JSON.parse(localStorage.getItem("adminToken")),
+      JSON.parse(token),
       payload
     );
     return employees.data.company.Employees;
@@ -21,63 +24,65 @@ const fetchSalariesApi = async (data) => {
   }
 };
 
-const createSalaryApi = async (data) => {
+const createEmployeesApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const employees = await service.post(
-      "salary/addSalary",
-      JSON.parse(localStorage.getItem("adminToken")),
+      "employee/create",
+      JSON.parse(token),
       data.payload
     );
     console.log(employees.data.message);
     return employees.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-const updateSalaryApi = async (data) => {
+const deleteEmployeeApi = async (data:any) => {
   try {
+    const token:any = localStorage.getItem("adminToken");
     const employees = await service.post(
-      "salary/updateSalary",
-      JSON.parse(localStorage.getItem("adminToken")),
+      "employee/deleteEmployee",
+      JSON.parse(token),
       data.payload
     );
     console.log(employees.data.message);
     return employees.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(
       error.response.data.error ? error.response.data.error : error
     );
   }
 };
 
-function* fetchSalaries(data) {
+function* fetchEmployees(data:any):any {
   try {
-    const salaries = yield call(fetchSalariesApi, data);
-    if (salaries) {
-      yield put(SET_SALARIES(salaries));
+    const employees = yield call(fetchEmployeesApi, data);
+    if (employees) {
+      yield put(SET_EMPLOYEES(employees));
     }
   } catch (error) {
     console.log(error);
   }
 }
 
-function* createSalary(data) {
+function* createEmployees(data:any):any {
   try {
-    const salaries = yield call(createSalaryApi, data);
-    if (salaries) {
-      yield call(fetchSalaries);
+    const employees = yield call(createEmployeesApi, data);
+    if (employees) {
+      yield call(fetchEmployees);
       const snackPayload = {
         status: true,
         type: "success",
-        message: salaries.message,
+        message: employees.message,
         error: false,
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -89,20 +94,20 @@ function* createSalary(data) {
   }
 }
 
-function* updateSalary(data) {
+function* deleteEmployee(data:any):any {
   try {
-    const salaries = yield call(updateSalaryApi, data);
-    if (salaries) {
-      yield call(fetchSalaries);
+    const employees = yield call(deleteEmployeeApi, data);
+    if (employees) {
+      yield call(fetchEmployees);
       const snackPayload = {
         status: true,
         type: "success",
-        message: salaries.message,
+        message: employees.message,
         error: false,
       };
       yield put(SET_SNACKBAR(snackPayload));
     }
-  } catch (error) {
+  } catch (error:any) {
     const snackPayloadError = {
       status: true,
       type: "error",
@@ -110,14 +115,13 @@ function* updateSalary(data) {
       error: true,
     };
     yield put(SET_SNACKBAR(snackPayloadError));
-    console.log(error);
   }
 }
 
-function* salarySaga() {
-  yield takeLatest("FETCH_SALARIES_REQUEST", fetchSalaries);
-  yield takeLatest("CREATE_SALARY_REQUEST", createSalary);
-  yield takeLatest("UPDATE_SALARY_REQUEST", updateSalary);
+function* employeesSaga():Generator<StrictEffect> {
+  yield takeLatest("FETCH_ALL_EMPLOYEES_REQUEST", fetchEmployees);
+  yield takeLatest("CREATE_EMPLOYEE_REQUEST", createEmployees);
+  yield takeLatest("DELETE_EMPLOYEE_REQUEST", deleteEmployee);
 }
 
-export default salarySaga;
+export default employeesSaga;

@@ -14,16 +14,16 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ChangeEvent } from 'react';
 
 
-import RootReducer from "./interfaces";
+import { useAppSelector } from "../../redux/reduxHook";
 
 const dummyUser = require("../../dummyUser.png");
 
 function AdminSetting() {
-  const [loading, setLoading] = useState(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const [image, setImage] = useState<any>();
-  const AuthUser = useSelector((state: RootReducer) =>
+  const AuthUser = useAppSelector((state) =>
     state.adminlogin.login ? state.adminlogin.login : false
   );
   const dispatch = useDispatch();
