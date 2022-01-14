@@ -7,7 +7,7 @@ import { blue } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
 
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/reduxHook";
 

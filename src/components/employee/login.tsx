@@ -1,4 +1,3 @@
-import Logo from "../../applogo.png";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -6,17 +5,20 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
 import { blue } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/reduxHook";
+
+const Logo  = require("../../applogo.png");
 
 function EmployeeLogin() {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
   const router = useNavigate();
-  const AuthUser = useSelector((state) =>
+  const AuthUser = useAppSelector((state) =>
     state.employeeLoginReducer.login ? state.employeeLoginReducer.login : false
   );
   function loginUser() {

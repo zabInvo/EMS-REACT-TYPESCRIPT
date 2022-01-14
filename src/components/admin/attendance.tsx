@@ -13,104 +13,99 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState, useEffect } from "react";
 import { blue } from "@mui/material/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import moment from "moment";
 import { Grid, Button } from "@mui/material";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import _ from "lodash";
 
-import CreateAttendanceDialog from "./createAttendanceDialog";
 import { useAppSelector } from "../../redux/reduxHook";
+import { Attendance } from "../../redux/reducers/admin/attendanceReducer";
 
-// function CollapsibleTable(props) {
-//   const { row } = props;
-//   const [open, setOpen] = useState(false);
-//   return (
-//     <>
-//       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-//         <TableCell>
-//           <IconButton
-//             aria-label="expand row"
-//             size="small"
-//             onClick={() => setOpen(!open)}
-//           >
-//             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-//           </IconButton>
-//         </TableCell>
-//         <TableCell component="th" scope="row">
-//           {row ? row.name : ""}
-//         </TableCell>
-//         <TableCell align="center"> {row ? row.email : ""}</TableCell>
-//       </TableRow>
-//       <TableRow>
-//         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-//           <Collapse in={open} timeout="auto" unmountOnExit>
-//             <Box sx={{ margin: 1 }}>
-//               <Typography variant="h6" gutterBottom component="div">
-//                 History
-//               </Typography>
-//               <Table size="small" aria-label="purchases">
-//                 <TableHead>
-//                   <TableRow>
-//                     <TableCell>Date</TableCell>
-//                     <TableCell>Status</TableCell>
-//                   </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                   {row && row.Attendances
-//                     ? row.Attendances.map((historyRow) => (
-//                         <TableRow key={historyRow.date}>
-//                           <TableCell component="th" scope="row">
-//                             {moment.utc(historyRow.date).format("MM/DD/YYYY")}
-//                           </TableCell>
-//                           <TableCell
-//                             sx={{
-//                               color:
-//                                 historyRow.status === "Present"
-//                                   ? "green"
-//                                   : "red",
-//                             }}
-//                           >
-//                             {historyRow.status}
-//                           </TableCell>
-//                         </TableRow>
-//                       ))
-//                     : () => {}}
-//                 </TableBody>
-//               </Table>
-//             </Box>
-//           </Collapse>
-//         </TableCell>
-//       </TableRow>
-//     </>
-//   );
-// }
-interface AttendanceObject {
-  status: string | null;
-  date: string | null;
+import CreateAttendanceDialog from "./createAttendanceDialog";
+
+interface AttendanceTable {
+  row : Attendance
 }
 
-interface AttendanceInterface {
-  name?: string;
-  email?: string;
-  Attendances?: Array<AttendanceObject>;
+const CollapsibleTable:React.FC<AttendanceTable> = (props) => {
+  const { row } = props;
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row ? row.name : ""}
+        </TableCell>
+        <TableCell align="center"> {row ? row.email : ""}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                History
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {row && row.Attendances
+                    ? row.Attendances.map((historyRow) => (
+                        <TableRow key={historyRow.date}>
+                          <TableCell component="th" scope="row">
+                            {moment.utc(historyRow.date).format("MM/DD/YYYY")}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              color:
+                                historyRow.status === "Present"
+                                  ? "green"
+                                  : "red",
+                            }}
+                          >
+                            {historyRow.status}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    : () => {}}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  );
 }
 
-function Attendance() {
+const Attendances = () => {
   const dispatch = useDispatch();
-  const [attendance, setAttendance] = useState([{}]);
-  const [sorting, setSorting] = useState("desc");
-  // const data = useSelector((state) =>
-  //   state.attendanceReducer.attendance.length > 1
-  //     ? state.attendanceReducer.attendance
-  //     : [{}]
-  // );
-  const data = useAppSelector((state)=> state.attendanceReducer.attendance.length > 1 ? state.attendanceReducer.attendance : [{}]);
-  const [showModal, setShowModal] = useState(false);
+  const [attendance, setAttendance] = useState<Attendance | any>();
+  const [sorting, setSorting] = useState<string>("desc");
+  const data = useAppSelector((state) =>
+    state.attendanceReducer.attendance.length > 1
+      ? state.attendanceReducer.attendance
+      : [{}]
+  );
+  const [showModal, setShowModal] = useState<boolean>(false);
   const toggleModal = () => {
     setShowModal(!showModal);
   };
-  console.log("this is data",data)
+
   useEffect(() => {
     setAttendance(data);
   }, [data]);
@@ -138,12 +133,11 @@ function Attendance() {
       }
     }
   };
-  // const currentCompany = useSelector((state) =>
-  //   state.companyReducer.currentCompany
-  //     ? state.companyReducer.currentCompany
-  //     : null
-  // );
-  const currentCompany = useAppSelector((state)=>state.companyReducer.currentCompany ? state.companyReducer.currentCompany  : null);
+  const currentCompany = useAppSelector((state) =>
+    state.companyReducer.currentCompany
+      ? state.companyReducer.currentCompany
+      : null
+  );
   useEffect(() => {
     dispatch({ type: "FETCH_ATTENDANCE_REQUEST", currentCompany });
   }, []);
@@ -163,7 +157,7 @@ function Attendance() {
               <TableRow>
                 <TableCell />
                 <TableCell sx={{ color: "white" }}>
-                  <div style={{ display: "flex", marginTop: "1" }}>
+                  <div style={{ display: "flex", marginTop: 1 }}>
                     Employee Name{" "}
                     <IconButton
                       onClick={() => {
@@ -188,20 +182,13 @@ function Attendance() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            {/* <TableBody>
-              {attendance.map((item, index) => (
-                // <CollapsibleTable key={index} row={item} />
-                <TableRow key={index}>Test</TableRow>
+            <TableBody>
+              {attendance.map((item:Attendance, index:number) => (
+                <CollapsibleTable key={index} row={item} />
               ))}
-            </TableBody> */}
+            </TableBody>
           </Table>
         </TableContainer>
-          {/* <TableBody> */}
-          {attendance.map((item:AttendanceInterface, index) => (
-                // <CollapsibleTable key={index} row={item} />
-                <div key={index}>{item?.name}</div>
-              ))}
-            {/* </TableBody> */}
         <CreateAttendanceDialog isOpen={showModal} toggle={toggleModal} />
       </Grid>
     );
@@ -219,4 +206,4 @@ function Attendance() {
   }
 }
 
-export default Attendance;
+export default Attendances;

@@ -13,7 +13,7 @@ import ImportExportIcon from "@mui/icons-material/ImportExport";
 import Grid from "@mui/material/Grid";
 
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import UpdateSalaryDialog from "./updateSalaryDialog";
 import CreateSalaryDialog from "./createSalaryDialog";

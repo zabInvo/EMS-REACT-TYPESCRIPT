@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+
+export interface LoginInterface {
+  login: boolean;
+  token : string | null;
+}
+
+const initialState: LoginInterface = {
   token: null,
   login: false,
 };
@@ -13,7 +19,7 @@ const employeeReducer = createSlice({
       state.token = action.payload.user.token;
       state.login = true;
     },
-    LOGOUT_EMPLOYEE(state, action) {
+    LOGOUT_EMPLOYEE(state) {
       state.token = null;
       state.login = false;
     },

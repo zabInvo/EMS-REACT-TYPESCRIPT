@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import CreateEmployeeDialog from "./createEmployeeDialog";
 import DeleteEmployeeDialog from "./deleteEmployeeDialog";

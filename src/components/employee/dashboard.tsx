@@ -5,16 +5,18 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../redux/reduxHook";
+
 
 function EmployeeDashboard() {
   const dispatch = useDispatch();
-  const salary = useSelector((state) =>
+  const salary = useAppSelector((state) =>
     state.employeeDashboardReducer.salary
       ? state.employeeDashboardReducer.salary.amount
       : "N/A"
   );
-  const companies = useSelector((state) =>
+  const companies = useAppSelector((state) =>
     state.employeeDashboardReducer.companies
       ? state.employeeDashboardReducer.companies
       : []

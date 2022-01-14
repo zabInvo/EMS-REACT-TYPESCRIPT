@@ -1,4 +1,3 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -16,8 +15,10 @@ import { blue } from "@mui/material/colors";
 import Checkbox from "@mui/material/Checkbox";
 import moment from "moment";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { useAppSelector } from "../../redux/reduxHook";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -39,11 +40,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function CreateAttendanceDialog(props) {
-  const [scroll, setScroll] = useState("paper");
-  const [checked, setChecked] = useState([]);
+interface CreateAttendanceProps {
+  isOpen: boolean;
+  toggle(): void;
+}
+
+const CreateAttendanceDialog: React.FC<CreateAttendanceProps> = (props) => {
+  const [scroll, setScroll] = useState<any>("paper");
+  const [checked, setChecked] = useState<number[]>([]);
   const dispatch = useDispatch();
-  const createAttendace = (index, user) => {
+
+  const createAttendace = (index: number, user: number) => {
     setChecked((oldArray) => [...oldArray, index]);
     const payload = {
       userId: user,
@@ -53,7 +60,7 @@ function CreateAttendanceDialog(props) {
     dispatch({ type: "CREATE_ATTENDANCE_REQUEST", payload });
   };
 
-  const employees = useSelector((state) =>
+  const employees = useAppSelector((state) =>
     state.employeesReducers.employees ? state.employeesReducers.employees : []
   );
 
@@ -103,6 +110,6 @@ function CreateAttendanceDialog(props) {
       </Dialog>
     </div>
   );
-}
+};
 
 export default CreateAttendanceDialog;

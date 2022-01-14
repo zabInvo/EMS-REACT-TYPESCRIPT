@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AttendanceObject {
+export interface AttendanceObject {
   status: string | null;
   date: string | null;
 }
 
-interface Attendance {
+export interface Attendance {
   name: string;
   email: string;
   Attendances: Array<AttendanceObject> | null | [];
 }
 
-interface AttendanceInterface {
+export interface AttendanceInterface {
   attendance: Array<Attendance> | [];
 }
 

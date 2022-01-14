@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../redux/reduxHook";
 import { EmployeeObject } from "../../redux/reducers/admin/employeesReducers";
 

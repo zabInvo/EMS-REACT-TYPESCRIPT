@@ -6,9 +6,10 @@ import service from "../../../services/axiosService";
 
 const getUserSalaryApi = async () => {
   try {
+    const token:any = localStorage.getItem("employeeToken");
     const salary = await service.post(
       "salary/getUserSalary",
-      JSON.parse(localStorage.getItem("employeeToken")),
+      JSON.parse(token),
     );
     return salary.data.data;
   } catch (error) {
@@ -18,9 +19,10 @@ const getUserSalaryApi = async () => {
 
 const getCompaniesApi = async () => {
   try {
+    const token:any = localStorage.getItem("employeeToken");
     const companies = await service.post(
       "company/getCompanies",
-      JSON.parse(localStorage.getItem("employeeToken")),
+      JSON.parse(token)
     );
     return companies.data.data;
   } catch (error) {
@@ -28,7 +30,7 @@ const getCompaniesApi = async () => {
   }
 };
 
-function* getUserSalary() {
+function* getUserSalary():any {
   try {
     const salary = yield call(getUserSalaryApi);
     if (salary) {
@@ -39,7 +41,7 @@ function* getUserSalary() {
   }
 }
 
-function* getCompanies() {
+function* getCompanies():any {
   try {
     const companies = yield call(getCompaniesApi);
     if (companies) {

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,12 +7,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { blue } from "@mui/material/colors";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
+import { useAppSelector } from "../../redux/reduxHook";
+import {AttendanceInterface} from "../../redux/reducers/employee/attendanceReducer"
+ 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: blue["900"],
@@ -36,11 +37,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function EmployeeAttendanceTable() {
   const [showModal, setShowModal] = useState(false);
-  const [showCreateSalaryModal, setShowCreateSalaryModal] = useState(false);
+  const [showCreateSalaryModal, setShowCreateSalaryModal] = useState<boolean>(false);
 
-  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [selectedEmployee, setSelectedEmployee] = useState<AttendanceInterface>();
   const dispatch = useDispatch();
-  const attendance = useSelector((state) =>
+  const attendance = useAppSelector((state) =>
     state.employeeAttendanceReducer.attendance
       ? state.employeeAttendanceReducer.attendance
       : []
@@ -57,7 +58,7 @@ function EmployeeAttendanceTable() {
     setShowCreateSalaryModal(!showCreateSalaryModal);
   };
 
-  const setEmployee = (item) => {
+  const setEmployee = (item:AttendanceInterface) => {
     setSelectedEmployee(item);
   };
 

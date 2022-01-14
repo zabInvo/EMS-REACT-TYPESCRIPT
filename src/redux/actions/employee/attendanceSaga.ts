@@ -6,9 +6,10 @@ import service from "../../../services/axiosService";
 
 const fetchAttendanceApi = async () => {
   try {
+    const token:any = localStorage.getItem("employeeToken");
     const attendance = await service.post(
       "attendance/getAttendance",
-      JSON.parse(localStorage.getItem("employeeToken"))
+      JSON.parse(token)
     );
     return attendance.data.data;
   } catch (error) {
@@ -16,7 +17,7 @@ const fetchAttendanceApi = async () => {
   }
 };
 
-function* fetchAttendance() {
+function* fetchAttendance():any {
   try {
     const attendance = yield call(fetchAttendanceApi);
     if (attendance) {

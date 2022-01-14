@@ -5,17 +5,20 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { blue } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
-import dummyUser from "../../dummyUser.png";
+
 
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
+
+const dummyUser = require("../../dummyUser.png")
+
 function EmployeeSetting() {
-  const [loading, setLoading] = useState(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const dispatch = useDispatch();
   function changePassword() {
     setLoading(true);
